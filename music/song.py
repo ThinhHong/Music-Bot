@@ -3,11 +3,14 @@ import discord.voice_client
 from discord.ext import commands, tasks
 from discord import FFmpegPCMAudio
 from configuration import config
+import queue
 
-class Music(commands.Cog):
+class Song(commands.Cog):
+
 
     def __init__(self, bot):
         self.bot = bot
+        self.queue = queue(bot, [], 20)
 
     @commands.command(description=config.HELP_JOIN)
     async def join(self, ctx):
@@ -85,4 +88,4 @@ class Music(commands.Cog):
   
 
 async def setup(bot):
-    await bot.add_cog(Music(bot))
+    await bot.add_cog(Song(bot))
