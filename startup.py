@@ -21,7 +21,7 @@ if __name__ == '__main__':
             sys.exit()
 
     bot_token = config_parser['botSetting']['botToken']
-    channel_id = int(config_parser['botSetting']['channelId'])
+    channel_id = int(config.BOT_CHANNEL)
     bot = commands.Bot(command_prefix='!', description=config.BOT_DESCRIPTION, intents=discord.Intents.all())
     bot_extensions = ['music.song']
     
