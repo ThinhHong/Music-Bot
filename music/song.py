@@ -10,10 +10,15 @@ class Song(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.queue = queue(bot, [], 20)
 
     @commands.command(description=config.HELP_JOIN)
     async def join(self, ctx):
+        """Function calls bot to enter voice chat user is in
+        Failes if user is not in a voice channel
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server
+        """
         if (ctx.author.voice):
             channel = ctx.message.author.voice.channel
             await channel.connect()
@@ -26,6 +31,12 @@ class Song(commands.Cog):
 
     @commands.command(pass_context=True)
     async def leave(self, ctx):
+        """Function forces bot to leave voice chat user is in
+        Failes if user is not in a voice channel
+        
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server
+        """
         if (ctx.voice_client):
             channel = ctx.message.author.voice.channel
             await ctx.guild.voice_client.disconnect()
@@ -38,13 +49,24 @@ class Song(commands.Cog):
 
     @commands.command(pass_context=True)
     async def play(self, ctx,music_name: str):
+        """Playes audio file on computer on voice channel bot is in
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server_
+            music_name (str): name of music user would like to play. Must have file downloaded
+        """
         bot_voice = ctx.guild.voice_client
-        source = FFmpegPCMAudio('claire.mp3')
-        play = bot_voice.play(source)
+        source = FFmpegPCMAudio(music_name)
+        bot_voice.play(source)
         await ctx.send(f"Now playing {music_name}!")
 
     @commands.command(pass_context=True)
     async def stop(self, ctx):
+        """Stops bot's voice in voice channel bot
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server_
+        """
 
         bot_voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if bot_voice.is_playing():
@@ -56,6 +78,11 @@ class Song(commands.Cog):
 
     @commands.command(pass_context=True)
     async def resume(self, ctx):
+        """Resumes voice
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server_
+        """
         bot_voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if bot_voice.is_paused():
             await ctx.send("Now resuming")
@@ -66,6 +93,11 @@ class Song(commands.Cog):
         
     @commands.command(pass_context=True)
     async def pause(self, ctx):
+        """Pauses voice of bot
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server_
+        """
         bot_voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if bot_voice.is_playing():
             await ctx.send("Now pausing")
@@ -77,6 +109,11 @@ class Song(commands.Cog):
         
     @commands.command(pass_context=True)
     async def toggle(self, ctx):
+        """Toggles bot voice
+
+        Args:
+            ctx: Controlled Parameter by discord API. Specifies context sent from caller in Discord Server_
+        """
         bot_voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if bot_voice.is_playing():
             bot_voice.pause()
@@ -86,6 +123,5 @@ class Song(commands.Cog):
             await ctx.send("Now resuming")
 
   
-
 async def setup(bot):
     await bot.add_cog(Song(bot))
