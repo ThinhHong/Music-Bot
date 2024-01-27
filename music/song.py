@@ -1,15 +1,16 @@
 import discord
 import discord.voice_client
+import os
 from discord.ext import commands, tasks
 from discord import FFmpegPCMAudio
 from configuration import config
-import queue
+import random
 
 class Song(commands.Cog):
 
-
     def __init__(self, bot):
         self.bot = bot
+        self.queue = []
 
     @commands.command(description=config.HELP_JOIN)
     async def join(self, ctx):
@@ -48,7 +49,7 @@ class Song(commands.Cog):
             return
 
     @commands.command(pass_context=True)
-    async def play(self, ctx,music_name: str):
+    async def play(self, ctx ,music_name: str):
         """Playes audio file on computer on voice channel bot is in
 
         Args:
@@ -56,9 +57,17 @@ class Song(commands.Cog):
             music_name (str): name of music user would like to play. Must have file downloaded
         """
         bot_voice = ctx.guild.voice_client
+        exist = os.path.isfile(f"./{music_name}")
+        print(exist)
         source = FFmpegPCMAudio(music_name)
         bot_voice.play(source)
+        if not exist:
+            await ctx.send(f"{music_name} is not in library")
+            return
+        
         await ctx.send(f"Now playing {music_name}!")
+        
+        
 
     @commands.command(pass_context=True)
     async def stop(self, ctx):
@@ -74,7 +83,7 @@ class Song(commands.Cog):
             await ctx.send("Song has stopped")
             return
         
-        await ctx.send("No audo is playing")
+        await ctx.send("No audio is playing")
 
     @commands.command(pass_context=True)
     async def resume(self, ctx):
@@ -123,5 +132,31 @@ class Song(commands.Cog):
             await ctx.send("Now resuming")
 
   
+
+    @commands.command(description=config.HELP_JOIN)
+    async def add_queue(self, ctx, song: str):
+        if len(self.queue) > self.max_length:
+            ctx.send("Can not add song, The max length of the playlist has been reached")
+            return
+    
+        self.queue.append(song)
+        ctx.send(f"Added {song} to the playlist")
+
+    @commands.command(description=config.HELP_JOIN)
+    async def play_next(self, ctx):
+        song = self.queue.pop(0)
+        self.play(ctx, song)
+        ctx.send(f"{song} is now playing")
+
+    @commands.command(description=config.HELP_JOIN)  
+    async def shuffle(self, ctx):
+        random.shuffle(self.queue)
+        ctx.send("Playlist has been shuffeled")
+
+    @commands.command(description=config.HELP_JOIN)  
+    async def show_queue(self, ctx):
+        print() 
+
+
 async def setup(bot):
     await bot.add_cog(Song(bot))

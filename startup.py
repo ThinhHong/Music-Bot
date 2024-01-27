@@ -23,7 +23,7 @@ if __name__ == '__main__':
     bot_token = config_parser['botSetting']['botToken']
     channel_id = int(config.BOT_CHANNEL)
     bot = commands.Bot(command_prefix='!', description=config.BOT_DESCRIPTION, intents=discord.Intents.all())
-    bot_extensions = ['music.song','maintain.control']
+    bot_extensions = ['music.song']
     
     if bot_token == "":
         print("Error detected, no bot token")
@@ -45,5 +45,9 @@ async def on_ready():
 
     await channel.send(f"{bot.user.name} has booted")
 
+@bot.command()
+@commands.is_owner()
+async def shutdown(ctx):
+    await ctx.bot.logout()
 
 bot.run(bot_token)
