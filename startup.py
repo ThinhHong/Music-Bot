@@ -11,6 +11,8 @@ if __name__ == '__main__':
     absolute_path = os.path.dirname(__file__)
     config_path = "configuration/config.ini"
     config_full_path = os.path.join(absolute_path, config_path)
+    parent_dir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(parent_dir)
     #read config file
     config_parser = configparser.ConfigParser()
     try:
@@ -23,7 +25,7 @@ if __name__ == '__main__':
     bot_token = config_parser['botSetting']['botToken']
     channel_id = int(config.BOT_CHANNEL)
     bot = commands.Bot(command_prefix='!', description=config.BOT_DESCRIPTION, intents=discord.Intents.all())
-    bot_extensions = ['music.song','maintain.control']
+    bot_extensions = ['music.song','maintain.control','music.test']
     
     if bot_token == "":
         print("Error detected, no bot token")
