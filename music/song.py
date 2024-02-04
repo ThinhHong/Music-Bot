@@ -30,7 +30,7 @@ class Song(commands.Cog):
             await ctx.send(f"{self.bot.user.name} can't join your voice channel since you are not in a channel")
             return
 
-    @commands.command(pass_context=True)
+    @commands.command(description=config.ON_LEAVE, pass_context=True)
     async def leave(self, ctx):
         """Function forces bot to leave voice chat user is in
         Failes if user is not in a voice channel
@@ -48,7 +48,7 @@ class Song(commands.Cog):
             await ctx.send("Not in voice channel")
             return
 
-    @commands.command(pass_context=True)
+    @commands.command(description=config.HELP_PLAY, pass_context=True)
     async def play(self, ctx ,music_name: str):
         """Playes audio file on computer on voice channel bot is in
 
