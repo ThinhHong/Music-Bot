@@ -13,7 +13,7 @@ class Queue(commands.Cog):
         self.max_length = 2
         
 
-    @commands.command(description=config.HELP_JOIN)
+    @commands.command()
     async def add_queue(self, ctx, song: str):
         if len(self.queue) > self.max_length:
             await ctx.send("Can not add song, The max length of the playlist has been reached")
@@ -23,7 +23,7 @@ class Queue(commands.Cog):
         await ctx.send(f"Added {song} to the playlist")
 
 
-    @commands.command(description=config.HELP_JOIN)
+    @commands.command()
     async def play_next(self, ctx):
         music_name = self.queue.pop(0)
         bot_voice = ctx.guild.voice_client
@@ -38,12 +38,12 @@ class Queue(commands.Cog):
         await ctx.send(f"Now playing {music_name}!")
         
         
-    @commands.command(description=config.HELP_JOIN)
+    @commands.command()
     async def play_next2(self, ctx):
         music_name = self.queue.pop(0)
         self.play(ctx, music_name)
 
-    @commands.command(description=config.HELP_JOIN)  
+    @commands.command()  
     async def show_queue(self, ctx):
         await ctx.send(self.queue) 
 

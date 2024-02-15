@@ -32,7 +32,7 @@ if __name__ == '__main__':
         sys.exit()
     
     
-@bot.event
+@bot.event(description=config.HELP_ON_READY)
 async def on_ready():
     """function has event wrapper. Function runs when bot is activated.
     event wrappers have specific names for specific functions.
